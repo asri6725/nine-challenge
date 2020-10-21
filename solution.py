@@ -1,5 +1,7 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, json
 from flask import request
+from werkzeug.exceptions import HTTPException
+
   
 app = Flask(__name__)
 
@@ -27,4 +29,17 @@ def postJsonHandler():
 @app.route('/hello', methods = ['GET'])
 def index():
 	return ''' <h2> Hello! This site parses json and returns stuff on the main page. </h2>  '''  
+
+
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    # start with the correct headers and status code from the error
+    response = e.get_response()
+    # replace the body with JSON
+    response.data = json.dumps({
+        "response": "Could not decode request: JSON parsing failed"
+    })
+    response.content_type = "application/json"
+    return response
 app.run(host='0.0.0.0', port= 80) 
