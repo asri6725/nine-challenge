@@ -25,11 +25,6 @@ def postJsonHandler():
     content = request.get_json()
     return jsonify(process(content))
     
-# This method is to just check if the site is live
-@app.route('/hello', methods = ['GET'])
-def index():
-	return ''' <h2> Hello! This site parses json and returns stuff on the main page. </h2>  '''  
-
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
